@@ -11,15 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
     @PostMapping(value = "api/plus", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JSONObject> plusFunc(HttpEntity<String> arguments) {
-        try {
+    public ResponseEntity<JSONObject> plusFunc(HttpEntity<String> arguments){
+        try{
             System.out.println(arguments.getBody());
 
             JSONObject response = new JSONObject();
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception ex) {
+        } catch (Exception ex){
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        //Илья пидор
+
+
+
     }
+
 }
