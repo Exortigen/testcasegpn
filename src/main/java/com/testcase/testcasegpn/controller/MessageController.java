@@ -45,16 +45,16 @@ public class MessageController {
             }
             switch (func){
                 case "add":
-                    soapCallMethod.callWeb("Add", intA, intB);
+                    SoapCallMethod.callWeb("Add", intA, intB);
                     break;
                 case "divide":
-                    soapCallMethod.callWeb("Divide", intA, intB);
+                    SoapCallMethod.callWeb("Divide", intA, intB);
                     break;
                 case "multiply":
-                    soapCallMethod.callWeb("Multiply", intA, intB);
+                    SoapCallMethod.callWeb("Multiply", intA, intB);
                     break;
                 case "subtract":
-                    soapCallMethod.callWeb("Subtract", intA, intB);
+                    SoapCallMethod.callWeb("Subtract", intA, intB);
                     break;
 
             }
