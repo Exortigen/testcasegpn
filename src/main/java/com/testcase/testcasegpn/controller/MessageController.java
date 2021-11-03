@@ -22,10 +22,10 @@ public class MessageController {
 
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
-        Integer intA = 0;
-        Integer intB = 0;
-        Integer result = 0;
         try(JsonParser ab = new JsonFactory().createParser(arguments.getBody())){
+            Integer intA = 0;
+            Integer intB = 0;
+            Integer result = 0;
             while (ab.nextToken() != JsonToken.END_OBJECT){
                 String fieldname = ab.getCurrentName();
                 if("intA".equals(fieldname)){
@@ -51,6 +51,7 @@ public class MessageController {
                     case "subtract":
                         result = SoapCallMethod.callWeb("Subtract", intA, intB);
                         break;
+                    default: return new ResponseEntity<>("Invalid request or arguments",HttpStatus.BAD_REQUEST);
                 }
                 JsonFactory jsonFactory = new JsonFactory();
                 OutputStream outputStream = new ByteArrayOutputStream();
@@ -60,10 +61,10 @@ public class MessageController {
                 jsonGenerator.writeEndObject();
                 jsonGenerator.close();
                 return new ResponseEntity<>(outputStream.toString(), HttpStatus.OK);
-            } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else return new ResponseEntity<>("Invalid request or arguments",HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid request or arguments", HttpStatus.BAD_REQUEST);
         }
     }
 

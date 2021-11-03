@@ -7,6 +7,7 @@ import javax.xml.soap.*;
 
 @Service
 public class SoapCallMethod {
+
     public static Integer callWeb(String method, int intA, int intB){
         String soapEndpointUrl = "http://www.dneonline.com/calculator.asmx";
         String soapActionTemplate = "http://tempuri.org/";
