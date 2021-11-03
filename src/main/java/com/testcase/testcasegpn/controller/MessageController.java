@@ -44,21 +44,22 @@ public class MessageController {
                 }
             }
             switch (func){
-                case "add":
-                    SoapCallMethod.callWeb("Add", intA, intB);
+                case "Add":
+                    System.out.println("ad");
+                    result = SoapCallMethod.callWeb(func, intA, intB);
                     break;
-                case "divide":
-                    SoapCallMethod.callWeb("Divide", intA, intB);
+                case "Divide":
+                    result = SoapCallMethod.callWeb(func, intA, intB);
                     break;
-                case "multiply":
-                    SoapCallMethod.callWeb("Multiply", intA, intB);
+                case "Multiply":
+                    result = SoapCallMethod.callWeb(func, intA, intB);
                     break;
-                case "subtract":
-                    SoapCallMethod.callWeb("Subtract", intA, intB);
+                case "Subtract":
+                    result = SoapCallMethod.callWeb(func, intA, intB);
                     break;
 
             }
-            //Новый коммент ради коммита
+            System.out.println(result);
 
             JSONObject response = new JSONObject();
             response.put("result",result);

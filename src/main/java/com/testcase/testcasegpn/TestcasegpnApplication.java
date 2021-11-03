@@ -12,7 +12,6 @@ public class TestcasegpnApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TestcasegpnApplication.class, args);
-        Integer result = SoapCallMethod.callWeb("Add", 10, 5);
 
     }
 
