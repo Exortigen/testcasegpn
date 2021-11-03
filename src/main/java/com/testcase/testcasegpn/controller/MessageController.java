@@ -27,9 +27,9 @@ public class MessageController {
 
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject> addFunc(HttpEntity<String> arguments, @PathVariable String func){
-        int intA = 0;
-        int intB = 0;
-        int result = 0;
+        Integer intA = 0;
+        Integer intB = 0;
+        Integer result = 0;
         System.out.println(arguments.getBody());
         try(JsonParser ab = new JsonFactory().createParser(arguments.getBody());){
             while (ab.nextToken() != JsonToken.END_OBJECT){
@@ -45,17 +45,16 @@ public class MessageController {
             }
             switch (func){
                 case "Add":
-                    System.out.println("ad");
-                    result = SoapCallMethod.callWeb(func, intA, intB);
+                    result = SoapCallMethod.callWeb("Add", intA, intB);
                     break;
                 case "Divide":
-                    result = SoapCallMethod.callWeb(func, intA, intB);
+                    result = SoapCallMethod.callWeb("Divide", intA, intB);
                     break;
                 case "Multiply":
-                    result = SoapCallMethod.callWeb(func, intA, intB);
+                    result = SoapCallMethod.callWeb("Multiply", intA, intB);
                     break;
                 case "Subtract":
-                    result = SoapCallMethod.callWeb(func, intA, intB);
+                    result = SoapCallMethod.callWeb("Subtract", intA, intB);
                     break;
 
             }
