@@ -21,7 +21,6 @@ public class MainController {
             ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        //Илья пидор
 
 
 
