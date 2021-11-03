@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.testcase.testcasegpn.soapservice.SoapCallMethod;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -16,46 +15,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-
-
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/calculator")
 public class MessageController {
-    private final SoapCallMethod soapCallMethod = new SoapCallMethod();
-
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject> addFunc(HttpEntity<String> arguments, @PathVariable String func){
-        int intA = 0;
-        int intB = 0;
-        int result = 0;
+        int a=0;
+        int b=0;
+        int result=0;
         System.out.println(arguments.getBody());
         try(JsonParser ab = new JsonFactory().createParser(arguments.getBody());){
             while (ab.nextToken() != JsonToken.END_OBJECT){
                 String fieldname = ab.getCurrentName();
-                if("intA".equals(fieldname)){
+                if("a".equals(fieldname)){
                     ab.nextToken();
-                    intA = ab.getValueAsInt();
+                    a = ab.getValueAsInt();
                 }
-                if("intB".equals(fieldname)){
+                if("b".equals(fieldname)){
                     ab.nextToken();
-                    intB = ab.getValueAsInt();
+                    b = ab.getValueAsInt();
                 }
             }
             switch (func){
-                case "add":
-                    SoapCallMethod.callWeb("Add", intA, intB);
-                    break;
-                case "divide":
-                    SoapCallMethod.callWeb("Divide", intA, intB);
-                    break;
-                case "multiply":
-                    SoapCallMethod.callWeb("Multiply", intA, intB);
-                    break;
-                case "subtract":
-                    SoapCallMethod.callWeb("Subtract", intA, intB);
-                    break;
+                case "add": break;
+                case "divide": break;
+                case "multiply": break;
+                case "subtract": break;
 
             }
 
