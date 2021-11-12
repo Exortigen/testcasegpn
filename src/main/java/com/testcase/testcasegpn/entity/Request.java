@@ -4,18 +4,19 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
 @Data
+@Table(name="request")
 public class Request {
-    private int intA;
-    private int intB;
-    private int result;
     @Id
     private long hashcode;
+    private int intA;
+    private int intB;
     private String method;
-
+    private int result;
     private int methodInt;
 
     public String getMethod() {
@@ -47,6 +48,7 @@ public class Request {
 
     @Override
     public int hashCode() {
+        hashcode = Objects.hash(intA, intB, methodInt);
         return Objects.hash(intA, intB, methodInt);
     }
 

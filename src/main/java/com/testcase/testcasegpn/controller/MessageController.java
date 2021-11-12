@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.*;
 import com.testcase.testcasegpn.repository.RequestRepository;
 import com.testcase.testcasegpn.entity.Request;
 import com.testcase.testcasegpn.service.SoapCallMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,16 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/calculator")
 public class MessageController {
-    private Request request;
-    private SoapCallMethod callMethod;
+    @Autowired
     private RequestRepository requestRepository;
 
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
+        SoapCallMethod callMethod = new SoapCallMethod();
+        Request request = new Request();
         Integer intA = 0;
         Integer intB = 0;
         Integer result = 0;
@@ -46,7 +49,16 @@ public class MessageController {
                     case "add":
                         request.setMethodInt(0);
                         request.setMethod("Add");
-                        request.setResult(callMethod.callWeb(request));
+                        request.hashCode();
+                        Optional<Request> requestOptional = requestRepository.findById(Long.valueOf(request.hashCode()));
+                        if (requestOptional.isPresent()) {
+                            System.out.println("Uje est");
+                            request = requestOptional.get();
+                        }
+                        else{
+                            request.setResult(callMethod.callWeb(request));
+                        requestRepository.save(request);
+                        }
                         break;
                     case "divide":
                         request.setMethodInt(1);
