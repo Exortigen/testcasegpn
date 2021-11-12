@@ -44,6 +44,7 @@ public class SoapCallMethod {
         soapBodyElem2.addTextNode(String.valueOf(request.getIntB()));
     }
     public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request, long hashCode) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(5);
         Integer methodResponse = 0;
         try {
             //Открыть соед.

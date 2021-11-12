@@ -12,7 +12,7 @@ import java.util.Objects;
 @Table(name="request")
 public class Request {
     @Id
-    private long hashcode;
+    private long personalhash;
     private int intA;
     private int intB;
     private String method;
@@ -48,7 +48,7 @@ public class Request {
 
     @Override
     public int hashCode() {
-        hashcode = Objects.hash(intA, intB, methodInt);
+        personalhash = Objects.hash(intA, intB, methodInt);
         return Objects.hash(intA, intB, methodInt);
     }
 
@@ -76,12 +76,12 @@ public class Request {
         this.result = result;
     }
 
-    public long getHashcode() {
-        return hashcode;
+    public long getPersonalhash() {
+        return personalhash;
     }
 
-    public void setHashcode(long hashcode) {
-        this.hashcode = hashcode;
+    public void setPersonalhash(long hashcode) {
+        this.personalhash = hashcode;
     }
 
     public int getMethodInt() {

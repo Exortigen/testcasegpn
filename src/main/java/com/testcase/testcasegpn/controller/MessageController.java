@@ -50,7 +50,7 @@ public class MessageController {
                         request.setMethodInt(0);
                         request.setMethod("Add");
                         request.hashCode();
-                        Optional<Request> requestOptional = requestRepository.findById(Long.valueOf(request.hashCode()));
+                        Optional<Request> requestOptional = requestRepository.findByPersonalhash(request.getPersonalhash());
                         if (requestOptional.isPresent()) {
                             System.out.println("Uje est");
                             request = requestOptional.get();
