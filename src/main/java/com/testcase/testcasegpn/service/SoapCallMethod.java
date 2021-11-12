@@ -1,6 +1,6 @@
-package com.testcase.testcasegpn.soapservice;
+package com.testcase.testcasegpn.service;
 
-import org.springframework.cache.annotation.Cacheable;
+import com.testcase.testcasegpn.entity.Request;
 import org.springframework.stereotype.Service;
 
 import javax.xml.soap.*;
@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 
 @Service
-
 public class SoapCallMethod {
     public Integer callWeb(Request request) throws InterruptedException {
         String soapEndpointUrl = "http://www.dneonline.com/calculator.asmx";

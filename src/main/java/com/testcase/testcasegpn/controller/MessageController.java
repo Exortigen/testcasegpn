@@ -1,8 +1,9 @@
 package com.testcase.testcasegpn.controller;
 
 import com.fasterxml.jackson.core.*;
-import com.testcase.testcasegpn.soapservice.Request;
-import com.testcase.testcasegpn.soapservice.SoapCallMethod;
+import com.testcase.testcasegpn.repository.RequestRepository;
+import com.testcase.testcasegpn.entity.Request;
+import com.testcase.testcasegpn.service.SoapCallMethod;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,28 +20,27 @@ import java.io.OutputStream;
 @RestController
 @RequestMapping("/calculator")
 public class MessageController {
-    private final SoapCallMethod soapCallMethod = new SoapCallMethod();
+    private Request request;
+    private SoapCallMethod callMethod;
+    private RequestRepository requestRepository;
 
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
-        Request request = new Request();
-        SoapCallMethod callMethod = new SoapCallMethod();
         Integer intA = 0;
         Integer intB = 0;
         Integer result = 0;
         try(JsonParser ab = new JsonFactory().createParser(arguments.getBody())){
-            while (ab.nextToken() != JsonToken.END_OBJECT){
+            while (ab.nextToken() != JsonToken.END_OBJECT) {
                 String fieldname = ab.getCurrentName();
-                if("intA".equals(fieldname)){
+                if ("intA".equals(fieldname)) {
                     ab.nextToken();
                     request.setIntA(ab.getValueAsInt());
                 }
-                if("intB".equals(fieldname)){
+                if ("intB".equals(fieldname)) {
                     ab.nextToken();
                     request.setIntB(ab.getValueAsInt());
                 }
             }
-
             if (request.getIntA() != 0 && request.getIntB() != 0) {
                 switch (func) {
                     case "add":
