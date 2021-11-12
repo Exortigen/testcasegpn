@@ -2,6 +2,8 @@ package com.testcase.testcasegpn.controller;
 
 import com.fasterxml.jackson.core.*;
 import com.testcase.testcasegpn.soapservice.SoapCallMethod;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,8 +22,11 @@ import java.io.OutputStream;
 public class MessageController {
     private final SoapCallMethod soapCallMethod = new SoapCallMethod();
 
+    @Tag(name = "REST-контроллер", description = "Контроллер для обрбаботки HTTP-запроса")
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
+    public ResponseEntity<String> addFunc(@Parameter(description = "HTTP-запрос") HttpEntity<String> arguments,
+                                          @PathVariable @Parameter(description = "Вычислительная операция") String func
+    ){
         try(JsonParser ab = new JsonFactory().createParser(arguments.getBody())){
             Integer intA = 0;
             Integer intB = 0;
