@@ -19,7 +19,7 @@ public class SoapCallMethod {
         String soapAction = soapActionTemplate + request.getMethod();
 
         //Вызываем
-        return (result = callSoapWebService(soapEndpointUrl, soapAction, request));
+        return (result = callSoapWebService(soapEndpointUrl, soapAction, request, request.hashCode()));
 
     }
 
@@ -44,8 +44,7 @@ public class SoapCallMethod {
         SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("intB", myNamespace);
         soapBodyElem2.addTextNode(String.valueOf(request.getIntB()));
     }
-    @Cacheable(cacheNames = "requests", key = "hashCode")
-    public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request) throws InterruptedException {
+    public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request, long hashCode) throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
         Integer methodResponse = 0;
         try {
@@ -84,5 +83,7 @@ public class SoapCallMethod {
 
         return soapMessage;
     }
+
+
 }
 

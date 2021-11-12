@@ -41,7 +41,7 @@ public class MessageController {
                 }
             }
 
-            if (intA != 0 && intB != 0) {
+            if (request.getIntA() != 0 && request.getIntB() != 0) {
                 switch (func) {
                     case "add":
                         request.setMethodInt(0);
