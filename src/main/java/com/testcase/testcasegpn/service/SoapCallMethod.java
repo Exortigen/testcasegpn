@@ -4,20 +4,19 @@ import com.testcase.testcasegpn.entity.Request;
 import org.springframework.stereotype.Service;
 
 import javax.xml.soap.*;
-import java.util.concurrent.TimeUnit;
+
 
 @Service
 public class SoapCallMethod {
     public Integer callWeb(Request request){
         String soapEndpointUrl = "http://www.dneonline.com/calculator.asmx";
         String soapActionTemplate = "http://tempuri.org/";
-        Integer result;
 
         //Строим URL
         String soapAction = soapActionTemplate + request.getMethod();
 
         //Вызываем
-        return (result = callSoapWebService(soapEndpointUrl, soapAction, request, request.hashCode()));
+        return (callSoapWebService(soapEndpointUrl, soapAction, request));
 
     }
 
@@ -43,7 +42,7 @@ public class SoapCallMethod {
         soapBodyElem2.addTextNode(String.valueOf(request.getIntB()));
     }
     public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request){
-        Integer methodResponse = 0;
+        int methodResponse = 0;
         try {
             //Открыть соед.
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
@@ -56,7 +55,7 @@ public class SoapCallMethod {
             SOAPBody result = soapResponse.getSOAPBody();
 
             //Получаем ответ от сервера и оборачиваем в Integer
-            methodResponse = Integer.valueOf(result.getElementsByTagName(request.getMethod() + "Result").item(0).getTextContent());
+            methodResponse = Integer.parseInt(result.getElementsByTagName(request.getMethod() + "Result").item(0).getTextContent());
 
             soapConnection.close();
             return methodResponse;
