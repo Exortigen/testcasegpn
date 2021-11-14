@@ -1,5 +1,8 @@
 package com.testcase.testcasegpn.entity;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -7,17 +10,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
+@Schema(description = "Сущность запроса")
 @Entity
-@Data
 @Table(name="request")
 public class Request {
     @Id
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private long personalhash;
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private int methodInt;
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private String method;
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private int result;
     private int intA;
     private int intB;
-    private String method;
-    private int result;
-    private int methodInt;
+
 
     public String getMethod() {
         return method;
@@ -76,5 +84,9 @@ public class Request {
 
     public void setMethodInt(int methodInt) {
         this.methodInt = methodInt;
+    }
+
+    public int getMethodInt() {
+        return methodInt;
     }
 }
