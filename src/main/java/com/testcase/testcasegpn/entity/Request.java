@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-//Убрать лишнее, мб Ломбок?
 @Entity
 @Data
 @Table(name="request")
@@ -29,12 +28,6 @@ public class Request {
     }
 
     public Request() {
-    }
-
-    public Request(int intA, int intB, int methodInt) {
-        this.intA = intA;
-        this.intB = intB;
-        this.methodInt = methodInt;
     }
 
     @Override
@@ -79,14 +72,6 @@ public class Request {
 
     public long getPersonalhash() {
         return personalhash;
-    }
-
-    public void setPersonalhash(long hashcode) {
-        this.personalhash = hashcode;
-    }
-
-    public int getMethodInt() {
-        return methodInt;
     }
 
     public void setMethodInt(int methodInt) {
