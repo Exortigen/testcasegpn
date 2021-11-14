@@ -13,34 +13,33 @@ public class MessageService {
     private RequestRepository requestRepository;
     SoapCallMethod callMethod = new SoapCallMethod();
 
-    private Request functionSwitch(Request request, String func) {
+    public Request functionSwitch(Request request, String func) {
         if (request.getIntA() != 0 && request.getIntB() != 0) {
             switch (func) {
                 case "add":
                     request.setMethodInt(0);
                     request.setMethod("Add");
-                    request = checkRequest(request);
                     break;
                 case "divide":
                     request.setMethodInt(1);
                     request.setMethod("Divide");
-                    request = checkRequest(request);
                     break;
                 case "multiply":
                     request.setMethodInt(3);
                     request.setMethod("Multiply");
-                    request = checkRequest(request);
                     break;
                 case "subtract":
                     request.setMethodInt(4);
                     request.setMethod("Subtract");
-                    request = checkRequest(request);
                     break;
+                default: break;
             }
-
+            request.hashCode();
+            request = checkRequest(request);
         }
     return request;
     }
+
     private Request checkRequest(Request request){
         Optional<Request> requestOptional = requestRepository.findByPersonalhash(request.getPersonalhash());
         if (requestOptional.isPresent()) {

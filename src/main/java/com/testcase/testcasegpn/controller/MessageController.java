@@ -1,8 +1,10 @@
 package com.testcase.testcasegpn.controller;
 
 import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.testcase.testcasegpn.repository.RequestRepository;
 import com.testcase.testcasegpn.entity.Request;
+import com.testcase.testcasegpn.service.MessageService;
 import com.testcase.testcasegpn.service.SoapCallMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,36 +30,40 @@ public class MessageController {
 
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
-        SoapCallMethod callMethod = new SoapCallMethod();
+        MessageService messageService = new MessageService();
+        ObjectMapper mapper = new ObjectMapper();
+        Request request;
+        try {
+            request = mapper.readValue(arguments.getBody(), Request.class);
+            messageService.functionSwitch(request,func);
+            return new ResponseEntity<>(mapper.writeValueAsString(request.getResult()), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/fix", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> fixs() {
         Request request = new Request();
-        //Вот тут поаккуратее сделать как нибудь, убрать переменные
-        Integer intA = 0;
-        Integer intB = 0;
-        Integer result = 0;
-        //Через стрим нельзя сделать?
-        try(JsonParser ab = new JsonFactory().createParser(arguments.getBody())){
-            while (ab.nextToken() != JsonToken.END_OBJECT) {
-                String fieldname = ab.getCurrentName();
-                if ("intA".equals(fieldname)) {
-                    ab.nextToken();
-                    request.setIntA(ab.getValueAsInt());
-                }
-                if ("intB".equals(fieldname)) {
-                    ab.nextToken();
-                    request.setIntB(ab.getValueAsInt());
-                }
-            }
-                //Тоже мб можно как то красивее сделать
-                JsonFactory jsonFactory = new JsonFactory();
-                OutputStream outputStream = new ByteArrayOutputStream();
-                JsonGenerator jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
+        try {
+            List<Request> requestOptional = requestRepository.findAll();
+            JsonFactory jsonFactory = new JsonFactory();
+            OutputStream outputStream = new ByteArrayOutputStream();
+            JsonGenerator jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
+            jsonGenerator.writeStartArray();
+            for (Request request1 : requestOptional) {
                 jsonGenerator.writeStartObject();
-                jsonGenerator.writeNumberField("result", request.getResult());
+                jsonGenerator.writeNumberField("intA", request1.getIntA());
+                jsonGenerator.writeNumberField("intB", request1.getIntB());
+                jsonGenerator.writeNumberField("result", request1.getPersonalhash());
                 jsonGenerator.writeEndObject();
-                jsonGenerator.close();
-                return new ResponseEntity<>(outputStream.toString(), HttpStatus.OK);
-            } catch (IOException ioException) {
-            ioException.printStackTrace();
+            }
+            jsonGenerator.writeEndArray();
+            jsonGenerator.close();
+            return new ResponseEntity<>(outputStream.toString(), HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
