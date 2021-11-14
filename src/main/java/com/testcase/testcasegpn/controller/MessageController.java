@@ -3,7 +3,6 @@ package com.testcase.testcasegpn.controller;
 import com.fasterxml.jackson.core.*;
 import com.testcase.testcasegpn.repository.RequestRepository;
 import com.testcase.testcasegpn.entity.Request;
-import com.testcase.testcasegpn.service.MessageService;
 import com.testcase.testcasegpn.service.SoapCallMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -26,7 +25,6 @@ public class MessageController {
     @Autowired
     private RequestRepository requestRepository;
 
-
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
         SoapCallMethod callMethod = new SoapCallMethod();
@@ -48,7 +46,7 @@ public class MessageController {
                     request.setIntB(ab.getValueAsInt());
                 }
             }
-
+                //Тоже мб можно как то красивее сделать
                 JsonFactory jsonFactory = new JsonFactory();
                 OutputStream outputStream = new ByteArrayOutputStream();
                 JsonGenerator jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
@@ -59,9 +57,6 @@ public class MessageController {
                 return new ResponseEntity<>(outputStream.toString(), HttpStatus.OK);
             } catch (IOException ioException) {
             ioException.printStackTrace();
-        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
