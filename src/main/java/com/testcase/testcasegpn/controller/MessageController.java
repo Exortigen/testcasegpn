@@ -1,11 +1,13 @@
 package com.testcase.testcasegpn.controller;
 
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testcase.testcasegpn.repository.RequestRepository;
 import com.testcase.testcasegpn.entity.Request;
+import com.testcase.testcasegpn.repository.RequestRepository;
 import com.testcase.testcasegpn.service.MessageService;
-import com.testcase.testcasegpn.service.SoapCallMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/calculator")
@@ -35,8 +38,10 @@ public class MessageController {
         Request request;
         try {
             request = mapper.readValue(arguments.getBody(), Request.class);
-            messageService.functionSwitch(request,func, requestRepository);
-            return new ResponseEntity<>(mapper.writeValueAsString(request.getResult()), HttpStatus.OK);
+            messageService.functionSwitch(request, func, requestRepository);
+            Map<String,Object> response = new HashMap<String, Object>();
+            response.put(request.getMethod()+"Result", request.getResult());
+            return new ResponseEntity<>(mapper.writeValueAsString(response), HttpStatus.OK);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
