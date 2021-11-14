@@ -3,6 +3,7 @@ package com.testcase.testcasegpn.controller;
 import com.fasterxml.jackson.core.*;
 import com.testcase.testcasegpn.repository.RequestRepository;
 import com.testcase.testcasegpn.entity.Request;
+import com.testcase.testcasegpn.service.MessageService;
 import com.testcase.testcasegpn.service.SoapCallMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -25,6 +26,7 @@ public class MessageController {
     @Autowired
     private RequestRepository requestRepository;
 
+
     @GetMapping(value = "/{func}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
         SoapCallMethod callMethod = new SoapCallMethod();
@@ -46,40 +48,7 @@ public class MessageController {
                     request.setIntB(ab.getValueAsInt());
                 }
             }
-            //Мб вместо свича сделаем перегруженную функцию и где-нибудь в сервисах?
-            if (request.getIntA() != 0 && request.getIntB() != 0) {
-                switch (func) {
-                    case "add":
-                        request.setMethodInt(0);
-                        request.setMethod("Add");
-                        request.hashCode();
-                        Optional<Request> requestOptional = requestRepository.findByPersonalhash(request.getPersonalhash());
-                        if (requestOptional.isPresent()) {
-                            System.out.println("Uje est");
-                            request = requestOptional.get();
-                        }
-                        else{
-                            request.setResult(callMethod.callWeb(request));
-                        requestRepository.save(request);
-                        }
-                        break;
-                    case "divide":
-                        request.setMethodInt(1);
-                        request.setMethod("Divide");
-                        request.setResult(callMethod.callWeb(request));
-                        break;
-                    case "multiply":
-                        request.setMethodInt(3);
-                        request.setMethod("Multiply");
-                        request.setResult(callMethod.callWeb(request));
-                        break;
-                    case "subtract":
-                        request.setMethodInt(4);
-                        request.setMethod("Subtract");
-                        request.setResult(callMethod.callWeb(request));
-                        break;
-                }
-                //Тоже мб можно как то красивее сделать
+
                 JsonFactory jsonFactory = new JsonFactory();
                 OutputStream outputStream = new ByteArrayOutputStream();
                 JsonGenerator jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);
@@ -88,8 +57,10 @@ public class MessageController {
                 jsonGenerator.writeEndObject();
                 jsonGenerator.close();
                 return new ResponseEntity<>(outputStream.toString(), HttpStatus.OK);
-            } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IOException | InterruptedException e) {
+            } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
