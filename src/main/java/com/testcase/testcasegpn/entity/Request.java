@@ -1,9 +1,6 @@
 package com.testcase.testcasegpn.entity;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,15 +12,17 @@ import java.util.Objects;
 @Table(name="request")
 public class Request {
     @Id
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Хэш операции", accessMode = Schema.AccessMode.READ_ONLY)
     private long personalhash;
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Вычислительная операция(int)", accessMode = Schema.AccessMode.READ_ONLY)
     private int methodInt;
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Вычислительная операция", accessMode = Schema.AccessMode.READ_ONLY)
     private String method;
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Результат операции", accessMode = Schema.AccessMode.READ_ONLY)
     private int result;
+    @Schema(description = "Аргумент 'A'", example = "30")
     private int intA;
+    @Schema(description = "Аргумент 'B'", example = "15")
     private int intB;
 
 
