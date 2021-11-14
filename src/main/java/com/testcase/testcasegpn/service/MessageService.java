@@ -30,7 +30,7 @@ public class MessageService {
                     request.setMethodInt(4);
                     request.setMethod("Subtract");
                     break;
-                default: break;
+                default: request=null; break;
             }
             request.hashCode();
             request = checkRequest(request, requestRepository);
