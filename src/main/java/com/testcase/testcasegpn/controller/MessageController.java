@@ -29,9 +29,11 @@ public class MessageController {
     public ResponseEntity<String> addFunc(HttpEntity<String> arguments, @PathVariable String func){
         SoapCallMethod callMethod = new SoapCallMethod();
         Request request = new Request();
+        //Вот тут поаккуратее сделать как нибудь, убрать переменные
         Integer intA = 0;
         Integer intB = 0;
         Integer result = 0;
+        //Через стрим нельзя сделать?
         try(JsonParser ab = new JsonFactory().createParser(arguments.getBody())){
             while (ab.nextToken() != JsonToken.END_OBJECT) {
                 String fieldname = ab.getCurrentName();
@@ -44,6 +46,7 @@ public class MessageController {
                     request.setIntB(ab.getValueAsInt());
                 }
             }
+            //Мб вместо свича сделаем перегруженную функцию и где-нибудь в сервисах?
             if (request.getIntA() != 0 && request.getIntB() != 0) {
                 switch (func) {
                     case "add":
@@ -76,6 +79,7 @@ public class MessageController {
                         request.setResult(callMethod.callWeb(request));
                         break;
                 }
+                //Тоже мб можно как то красивее сделать
                 JsonFactory jsonFactory = new JsonFactory();
                 OutputStream outputStream = new ByteArrayOutputStream();
                 JsonGenerator jsonGenerator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8);

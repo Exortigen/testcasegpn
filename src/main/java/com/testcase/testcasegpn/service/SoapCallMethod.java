@@ -7,6 +7,7 @@ import javax.xml.soap.*;
 import java.util.concurrent.TimeUnit;
 
 
+//Убрать лишние комменты
 @Service
 public class SoapCallMethod {
     public Integer callWeb(Request request) throws InterruptedException {

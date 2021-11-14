@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
+//Убрать лишнее, мб Ломбок?
 @Entity
 @Data
 @Table(name="request")
