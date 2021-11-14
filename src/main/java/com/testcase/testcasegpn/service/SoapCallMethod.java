@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service;
 import javax.xml.soap.*;
 import java.util.concurrent.TimeUnit;
 
-
-//Убрать лишние комменты
 @Service
 public class SoapCallMethod {
-    public Integer callWeb(Request request) throws InterruptedException {
+    public Integer callWeb(Request request){
         String soapEndpointUrl = "http://www.dneonline.com/calculator.asmx";
         String soapActionTemplate = "http://tempuri.org/";
         Integer result;
@@ -44,8 +42,7 @@ public class SoapCallMethod {
         SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("intB", myNamespace);
         soapBodyElem2.addTextNode(String.valueOf(request.getIntB()));
     }
-    public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request, long hashCode) throws InterruptedException {
-        TimeUnit.SECONDS.sleep(5);
+    public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request){
         Integer methodResponse = 0;
         try {
             //Открыть соед.
@@ -55,16 +52,15 @@ public class SoapCallMethod {
             //Отправить SOAP message на SOAP сервер
             SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, request), soapEndpointUrl);
 
-           /* System.out.println("Response SOAP: ");
-            soapResponse.writeTo(System.out);
-            System.out.println();*/
             //Достаем body из ответа
             SOAPBody result = soapResponse.getSOAPBody();
+
             //Получаем ответ от сервера и оборачиваем в Integer
             methodResponse = Integer.valueOf(result.getElementsByTagName(request.getMethod() + "Result").item(0).getTextContent());
 
             soapConnection.close();
             return methodResponse;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
