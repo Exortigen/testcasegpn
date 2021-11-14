@@ -35,7 +35,7 @@ public class MessageController {
         Request request;
         try {
             request = mapper.readValue(arguments.getBody(), Request.class);
-            messageService.functionSwitch(request,func);
+            messageService.functionSwitch(request,func, requestRepository);
             return new ResponseEntity<>(mapper.writeValueAsString(request.getResult()), HttpStatus.OK);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
