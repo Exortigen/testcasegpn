@@ -1,5 +1,6 @@
-package com.testcase.testcasegpn.soapservice;
+package com.testcase.testcasegpn.service;
 
+import com.testcase.testcasegpn.entity.Request;
 import org.springframework.stereotype.Service;
 
 import javax.xml.soap.*;
@@ -7,22 +8,20 @@ import javax.xml.soap.*;
 
 @Service
 public class SoapCallMethod {
-
-    public static Integer callWeb(String method, int intA, int intB){
+    public Integer callWeb(Request request){
         String soapEndpointUrl = "http://www.dneonline.com/calculator.asmx";
         String soapActionTemplate = "http://tempuri.org/";
-        Integer result;
 
         //Строим URL
-        String soapAction = soapActionTemplate + method;
+        String soapAction = soapActionTemplate + request.getMethod();
 
         //Вызываем
-        return (result = callSoapWebService(soapEndpointUrl, soapAction, method, intA, intB ));
+        return (callSoapWebService(soapEndpointUrl, soapAction, request));
 
     }
 
 
-    private static void createSoapEnvelope(SOAPMessage soapMessage, String method, int intA, int intB) throws SOAPException {
+    private void createSoapEnvelope(SOAPMessage soapMessage, Request request) throws SOAPException {
       SOAPPart soapPart = soapMessage.getSOAPPart();
 
         String myNamespace = "tem";
@@ -34,53 +33,52 @@ public class SoapCallMethod {
 
         //Создаем тело запроса
         SOAPBody soapBody = envelope.getBody();
-        SOAPElement soapBodyElem = soapBody.addChildElement(method, myNamespace);
+        SOAPElement soapBodyElem = soapBody.addChildElement(request.getMethod(), myNamespace);
 
         SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("intA", myNamespace);
-        soapBodyElem1.addTextNode(String.valueOf(intA));
+        soapBodyElem1.addTextNode(String.valueOf(request.getIntA()));
 
         SOAPElement soapBodyElem2 = soapBodyElem.addChildElement("intB", myNamespace);
-        soapBodyElem2.addTextNode(String.valueOf(intB));
+        soapBodyElem2.addTextNode(String.valueOf(request.getIntB()));
     }
-    private static Integer callSoapWebService(String soapEndpointUrl, String soapAction, String method, int intA, int intB) {
-        Integer methodResponse = 0;
+    public Integer callSoapWebService(String soapEndpointUrl, String soapAction, Request request){
+        int methodResponse = 0;
         try {
             //Открыть соед.
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
             SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
             //Отправить SOAP message на SOAP сервер
-            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, method, intA, intB), soapEndpointUrl);
+            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, request), soapEndpointUrl);
 
-           /* System.out.println("Response SOAP: ");
-            soapResponse.writeTo(System.out);
-            System.out.println();*/
             //Достаем body из ответа
             SOAPBody result = soapResponse.getSOAPBody();
+
             //Получаем ответ от сервера и оборачиваем в Integer
-            methodResponse = Integer.valueOf(result.getElementsByTagName(method + "Result").item(0).getTextContent());
+            methodResponse = Integer.parseInt(result.getElementsByTagName(request.getMethod() + "Result").item(0).getTextContent());
 
             soapConnection.close();
             return methodResponse;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return methodResponse;
     }
-    private static SOAPMessage createSOAPRequest(String soapAction, String method, int intA, int intB) throws Exception {
+    private SOAPMessage createSOAPRequest(String soapAction, Request request) throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
 
-        createSoapEnvelope(soapMessage, method, intA, intB);
+        createSoapEnvelope(soapMessage, request);
 
         MimeHeaders headers = soapMessage.getMimeHeaders();
         headers.addHeader("SOAPAction", soapAction);
 
         soapMessage.saveChanges();
 
-        /* Print the request message, just for debugging purposes */
-
         return soapMessage;
     }
+
+
 }
 
